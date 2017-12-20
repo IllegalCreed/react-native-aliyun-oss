@@ -1,120 +1,99 @@
-/**
- * @flow
- */
-'use strict';
+import {DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform} from "react-native";
+const {AliyunOSS} = NativeModules;
 
-import {
-  NativeModules,
-  NativeAppEventEmitter,
-  NativeEventEmitter,
-  Platform
-} from 'react-native';
-const NativeAliyunOSS = NativeModules.AliyunOSS;
-const UPLOAD_EVENT = 'uploadProgress';
-const DOWNLOAD_EVENT = 'downloadProgress';
+let subscription;
 
-const _subscriptions = new Map();
-
-const AliyunOSS = {
-  //开启oss log
-  enableOSSLog() {
-    NativeAliyunOSS.enableOSSLog();
-  },
-  /*初始化ossclient，
-  **通过AccessKey和SecretKey
-  *
-  */
-  initWithKey(conf, EndPoint) {
-    NativeAliyunOSS.initWithKey(conf.AccessKey, conf.SecretKey, EndPoint);
-  },
-  /*初始化ossclient，
-  **通过签名字符串，此处采用的是服务端签名
-  *
-  */
-  initWithSigner(AccessKey, Signature, EndPoint) {
-    NativeAliyunOSS.initWithSigner(AccessKey, Signature, EndPoint);
-  },
-  /*异步上传文件
-  **bucketName
-  *sourceFile:源文件路径，例如:/User/xx/xx/test.jpg
-  *ossFile:目标路径，例如:文件夹/文件名  test/test.jpg
-  *updateDate:需要和签名中用到的时间一致
-  */
-  uploadObjectAsync(conf) {
-    return NativeAliyunOSS.uploadObjectAsync(
-      conf.bucketName,
-      conf.sourceFile,
-      conf.ossFile,
-      conf.updateDate);
-  },
-
-  downloadObjectAsync(conf) {
-    return NativeAliyunOSS.downloadObjectAsync(
-      conf.bucketName,
-      conf.ossFile,
-      conf.updateDate);
-  },
-
-  /*监听上传和下载事件，
-  **返回对象3个属性
-  *everySentSize:每次上传／下载字节
-  *currentSize:当前所需上传／下载字节
-  *totalSize:总字节
-  */
-  addEventListener(type, handler) {
-    var listener;
-    if (Platform.OS === 'ios') {
-      const Emitter = new NativeEventEmitter(NativeAliyunOSS);
-      if (type === UPLOAD_EVENT) {
-        listener = Emitter.addListener(
-          'uploadProgress',
-          (uploadData) => {
-            handler(uploadData);
-          }
-        );
-      } else if (type === DOWNLOAD_EVENT) {
-        listener = Emitter.addListener(
-          'downloadProgress',
-          (downloadData) => {
-            handler(downloadData);
-          }
-        );
-      } else {
-        return false;
-      }
-    }
-    else {
-      if (type === UPLOAD_EVENT) {
-        listener = NativeAppEventEmitter.addListener(
-          'uploadProgress',
-          (uploadData) => {
-            handler(uploadData);
-          }
-        );
-      } else if (type === DOWNLOAD_EVENT) {
-        listener = NativeAppEventEmitter.addListener(
-          'downloadProgress',
-          (downloadData) => {
-            handler(downloadData);
-          }
-        );
-      } else {
-        return false;
-      }
-    }
-    _subscriptions.set(handler, listener);
-  },
-  removeEventListener(type, handler) {
-    if (type !== UPLOAD_EVENT && type !== DOWNLOAD_EVENT) {
-      return false;
-    }
-    var listener = _subscriptions.get(handler);
-    if (!listener) {
-      return;
-    }
-    listener.remove();
-    _subscriptions.delete(handler);
-  }
+//default configuration for OSS Client
+const conf = {
+    maxRetryCount: 3,
+    timeoutIntervalForRequest: 30,
+    timeoutIntervalForResource: 24 * 60 * 60
 };
 
-module.exports = AliyunOSS;
+export default NativeAliyunOSS = {
+
+    //Enable dev mode
+    enableDevMode() {
+        AliyunOSS.enableDevMode();
+    },
+
+    /**
+     * Initialize the OSS Client
+     * Mode: PlainTextAKSK
+     */
+    initWithPlainTextAccessKey(accessKey, secretKey, endPoint, configuration = conf) {
+        AliyunOSS.initWithPlainTextAccessKey(accessKey, secretKey, endPoint, configuration);
+    },
+
+    /**
+     * Initialize the OSS Client
+     * Mode: ImplementedSigner
+     */
+    initWithImplementedSigner(signature, accessKey, endPoint, configuration = conf) {
+        AliyunOSS.initWithImplementedSigner(signature, accessKey, endPoint, configuration);
+    },
+
+    /**
+     * Initialize the OSS Client
+     * Mode: SecurityToken (STS)
+     */
+    initWithSecurityToken(securityToken, accessKey, secretKey, endPoint, configuration = conf) {
+        AliyunOSS.initWithSecurityToken(securityToken, accessKey, secretKey, endPoint, configuration);
+    },
+
+    /**
+     * Asynchronously uploading
+     */
+    asyncUpload(bucketName, objectKey, filepath) {
+        return AliyunOSS.asyncUpload(bucketName, objectKey, filepath);
+    },
+
+    /**
+     * Asynchronously downloading
+     */
+    asyncDownload(bucketName, objectKey, filepath = null) {
+        return AliyunOSS.asyncDownload(bucketName, objectKey, filepath);
+    },
+
+    /**
+     * event listener for native upload/download event
+     * @param event one of 'uploadProgress' or 'downloadProgress'
+     * @param callback a callback function accepts one params: event
+     */
+    addEventListener(event, callback) {
+        const RNAliyunEmitter = Platform.OS === 'ios' ? new NativeEventEmitter(AliyunOSS) : new DeviceEventEmitter(AliyunOSS);
+        switch (event) {
+            case 'uploadProgress':
+                subscription = RNAliyunEmitter.addListener(
+                    'uploadProgress',
+                    e => callback(e)
+                );
+                break;
+            case 'downloadProgress':
+                subscription = RNAliyunEmitter.addListener(
+                    'downloadProgress',
+                    e => callback(e)
+                );
+                break;
+            default:
+                break;
+        }
+    },
+
+    /**
+     * remove event listener for native upload/download event
+     * @param event one of 'uploadProgress' or 'downloadProgress'
+     */
+    removeEventListener(event) {
+        switch (event) {
+            case 'uploadProgress':
+                subscription.remove();
+                break;
+            case 'downloadProgress':
+                subscription.remove();
+                break;
+            default:
+                break;
+        }
+    }
+};

@@ -2,27 +2,49 @@
 //  RCTAliyunOSS.m
 //  RCTAliyunOSS
 //
-//  Created by 李京生 on 2016/10/26.
-//  Copyright © 2016年 lesonli. All rights reserved.
+//  Created by 张旭 on 2017/12/20.
+//  Copyright © 2017年 张旭. All rights reserved.
 //
 
 #import "RCTAliyunOSS.h"
-#import "RCTLog.h"
-#import "OSSService.h"
+#import <React/RCTLog.h>
+#import <React/RCTConvert.h>
+@import Photos;
+@import MobileCoreServices;
 
-
-@implementation RCTAliyunOSS{
-    
-    OSSClient *client;
- 
+@implementation RCTAliyunOSS
+-(void)startObserving {
+    _hasListeners = YES;
+    // Set up any upstream listeners or background tasks as necessary
 }
 
-- (NSArray<NSString *> *)supportedEvents {
+
+/**Will be called when this module's last listener is removed, or on dealloc.
+ 
+ */
+-(void)stopObserving {
+    _hasListeners = NO;
+    // Remove upstream listeners, stop unnecessary background tasks
+}
+
+
+/**
+ Supported two events: uploadProgress, downloadProgress
+ 
+ @return an array stored all supported events
+ */
+-(NSArray<NSString *> *)supportedEvents
+{
     return @[@"uploadProgress", @"downloadProgress"];
 }
 
-// get local file dir which is readwrite able
-- (NSString *)getDocumentDirectory {
+
+/**
+ Get local directory with read/write accessed
+ 
+ @return document directory
+ */
+-(NSString *)getDocumentDirectory {
     NSString * path = NSHomeDirectory();
     NSLog(@"NSHomeDirectory:%@",path);
     NSString * userName = NSUserName();
@@ -33,136 +55,285 @@
     return documentsDirectory;
 }
 
+
+/**
+ Get a temporary directory inside of application's sandbox
+ 
+ @return document directory
+ */
+-(NSString*)getTemporaryDirectory {
+    NSString *TMP_DIRECTORY = @"react-native/";
+    NSString *filepath = [NSTemporaryDirectory() stringByAppendingString:TMP_DIRECTORY];
+    
+    BOOL isDir;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:filepath isDirectory:&isDir];
+    if (!exists) {
+        [[NSFileManager defaultManager] createDirectoryAtPath: filepath
+                                  withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    return filepath;
+}
+
+
+/**
+ Setup initial configuration for initializing OSS Client
+ 
+ @param configuration a configuration object (NSDictionary *) passed from react-native side
+ */
+-(void)initConfiguration:(NSDictionary *)configuration {
+    _clientConfiguration = [OSSClientConfiguration new];
+    _clientConfiguration.maxRetryCount = [RCTConvert int:configuration[@"maxRetryCount"]]; //default 3
+    _clientConfiguration.timeoutIntervalForRequest = [RCTConvert double:configuration[@"timeoutIntervalForRequest"]]; //default 30
+    _clientConfiguration.timeoutIntervalForResource = [RCTConvert double:configuration[@"timeoutIntervalForResource"]]; //default 24 * 60 * 60
+}
+
+
+/**
+ Begin a new uploading task
+ Currently, support AssetLibrary, PhotoKit, and pure File for uploading
+ Also, will convert the HEIC image to JPEG format
+ 
+ @param filepath passed from reacit-native side, it might be a path started with 'assets-library://', 'localIdentifier://', 'file:'
+ @param callback a block waiting to be called right after the binary data of asset is found
+ */
+-(void)beginUploadingWithFilepath:(NSString *)filepath resultBlock:(void (^) (NSData *))callback {
+    
+    // read asset data from filepath
+    if ([filepath hasPrefix:@"assets-library://"]) {
+        PHAsset *asset = [PHAsset fetchAssetsWithALAssetURLs:@[filepath] options:nil].firstObject;
+        [self convertToNSDataFromAsset:asset withHandler:callback];
+        
+    } else if ([filepath hasPrefix:@"localIdentifier://"]) {
+        NSString *localIdentifier = [filepath stringByReplacingOccurrencesOfString:@"localIdentifier://" withString:@""];
+        PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[localIdentifier] options:nil].firstObject;
+        [self convertToNSDataFromAsset:asset withHandler:callback];
+        
+    } else {
+        NSData *data = [NSData dataWithContentsOfFile:filepath];
+        callback(data);
+        
+    }
+}
+
+/**
+ a helper method to do the file convertion
+ @param asset PHAsset
+ @param handler a callback block
+ */
+-(void)convertToNSDataFromAsset:(PHAsset *)asset withHandler:(void (^) (NSData *))handler
+{
+    PHImageManager *imageManager = [PHImageManager defaultManager];
+    
+    switch (asset.mediaType) {
+            
+        case PHAssetMediaTypeImage: {
+            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+            options.networkAccessAllowed = YES;
+            [imageManager requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                if ([dataUTI isEqualToString:(__bridge NSString *)kUTTypeJPEG]) {
+                    handler(imageData);
+                } else {
+                    //if the image UTI is not JPEG, then do the convertion to make sure its compatibility
+                    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
+                    NSDictionary *imageInfo = (__bridge NSDictionary*)CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
+                    NSDictionary *metadata = [imageInfo copy];
+                    
+                    NSMutableData *imageDataJPEG = [NSMutableData data];
+                    
+                    CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageDataJPEG, kUTTypeJPEG, 1, NULL);
+                    CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef)metadata);
+                    CGImageDestinationFinalize(destination);
+                    
+                    handler([NSData dataWithData:imageDataJPEG]);
+                }
+            }];
+            break;
+        }
+            
+        case PHAssetMediaTypeVideo:{
+            PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+            options.networkAccessAllowed = YES;
+            [imageManager requestExportSessionForVideo:asset options:options exportPreset:AVAssetExportPresetHighestQuality resultHandler:^(AVAssetExportSession * _Nullable exportSession, NSDictionary * _Nullable info) {
+                
+                //generate a temporary directory for caching the video (MP4 Only)
+                NSString *filePath = [[self getTemporaryDirectory] stringByAppendingString:[[NSUUID UUID] UUIDString]];
+                filePath = [filePath stringByAppendingString:@".mp4"];
+                
+                exportSession.shouldOptimizeForNetworkUse = YES;
+                exportSession.outputFileType = AVFileTypeMPEG4;
+                exportSession.outputURL = [NSURL fileURLWithPath:filePath];
+                
+                [exportSession exportAsynchronouslyWithCompletionHandler:^{
+                    handler([NSData dataWithContentsOfFile:filePath]);
+                }];
+            }];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
+/**
+ Expose this native module to RN
+ 
+ */
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(enableOSSLog) {
-    // 打开调试log
+
+/**
+ enable the dev mode
+ 
+ */
+RCT_EXPORT_METHOD(enableDevMode){
+    // enable OSS logger
     [OSSLog enableLog];
-    RCTLogInfo(@"OSSLog: 已开启");
-}
-// 由阿里云颁发的AccessKeyId/AccessKeySecret初始化客户端。
-// 明文设置secret的方式建议只在测试时使用，
-// 如果已经在bucket上绑定cname，将该cname直接设置到endPoint即可
-RCT_EXPORT_METHOD(initWithKey:(NSString *)AccessKey
-                  SecretKey:(NSString *)SecretKey
-                  Endpoint:(NSString *)Endpoint){
-    
-    id<OSSCredentialProvider> credential = [[OSSPlainTextAKSKPairCredentialProvider alloc] initWithPlainTextAccessKey:AccessKey secretKey:SecretKey];
-    
-    OSSClientConfiguration * conf = [OSSClientConfiguration new];
-    conf.maxRetryCount = 3;
-    conf.timeoutIntervalForRequest = 30;
-    conf.timeoutIntervalForResource = 24 * 60 * 60;
-    
-    client = [[OSSClient alloc] initWithEndpoint:Endpoint credentialProvider:credential clientConfiguration:conf];
 }
 
-//通过签名方式初始化，需要服务端实现签名字符串，签名算法参考阿里云文档
-RCT_EXPORT_METHOD(initWithSigner:(NSString *)AccessKey
-                  Signature:(NSString *)Signature
-                  Endpoint:(NSString *)Endpoint){
+
+/**
+ initWithPlainTextAccessKey
+ 
+ */
+RCT_EXPORT_METHOD(initWithPlainTextAccessKey:(NSString *)accessKey secretKey:(NSString *)secretKey endPoint:(NSString *)endPoint configuration:(NSDictionary *)configuration){
     
-    // 自实现签名，可以用本地签名也可以远程加签
-    id<OSSCredentialProvider> credential1 = [[OSSCustomSignerCredentialProvider alloc] initWithImplementedSigner:^NSString *(NSString *contentToSign, NSError *__autoreleasing *error) {
-        //NSString *signature = [OSSUtil calBase64Sha1WithData:contentToSign withSecret:@"<your secret key>"];
-        if (Signature != nil) {
+    id<OSSCredentialProvider> credential = [[OSSPlainTextAKSKPairCredentialProvider alloc] initWithPlainTextAccessKey:accessKey secretKey:secretKey];
+    
+    [self initConfiguration: configuration];
+    
+    _client = [[OSSClient alloc] initWithEndpoint:endPoint credentialProvider:credential clientConfiguration:_clientConfiguration];
+}
+
+
+/**
+ initWithImplementedSigner
+ 
+ */
+RCT_EXPORT_METHOD(initWithImplementedSigner:(NSString *)signature accessKey:(NSString *)accessKey endPoint:(NSString *)endPoint configuration:(NSDictionary *)configuration){
+    
+    id<OSSCredentialProvider> credential = [[OSSCustomSignerCredentialProvider alloc] initWithImplementedSigner:^NSString *(NSString *contentToSign, NSError *__autoreleasing *error) {
+        if (signature != nil) {
             *error = nil;
         } else {
             // construct error object
-            *error = [NSError errorWithDomain:Endpoint code:OSSClientErrorCodeSignFailed userInfo:nil];
+            *error = [NSError errorWithDomain:endPoint code:OSSClientErrorCodeSignFailed userInfo:nil];
             return nil;
         }
-        //return [NSString stringWithFormat:@"OSS %@:%@", @"<your access key>", signature];
-        return [NSString stringWithFormat:@"OSS %@:%@", AccessKey, Signature];
+        return [NSString stringWithFormat:@"OSS %@:%@", accessKey, signature];
     }];
-
     
-    OSSClientConfiguration * conf = [OSSClientConfiguration new];
-    conf.maxRetryCount = 1;
-    conf.timeoutIntervalForRequest = 30;
-    conf.timeoutIntervalForResource = 24 * 60 * 60;
+    [self initConfiguration: configuration];
     
-    client = [[OSSClient alloc] initWithEndpoint:Endpoint credentialProvider:credential1 clientConfiguration:conf];
+    _client = [[OSSClient alloc] initWithEndpoint:endPoint credentialProvider:credential clientConfiguration:_clientConfiguration];
 }
 
-//异步下载
-RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKey:(NSString *)objectKey updateDate:(NSString *)updateDate resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    OSSGetObjectRequest *request = [OSSGetObjectRequest new];
-    // required
-    request.bucketName = bucketName;
-    request.objectKey = objectKey;
-    // optional
-    request.downloadProgress = ^(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+
+/**
+ initWithSecurityToken
+ 
+ */
+RCT_EXPORT_METHOD(initWithSecurityToken:(NSString *)securityToken accessKey:(NSString *)accessKey secretKey:(NSString *)secretKey endPoint:(NSString *)endPoint configuration:(NSDictionary *)configuration){
+    
+    id<OSSCredentialProvider> credential = [[OSSStsTokenCredentialProvider alloc] initWithAccessKeyId:accessKey secretKeyId:secretKey securityToken:securityToken];
+    
+    [self initConfiguration: configuration];
+    
+    
+    _client = [[OSSClient alloc] initWithEndpoint:endPoint credentialProvider:credential clientConfiguration:_clientConfiguration];
+}
+
+
+/**
+ Asynchronous uploading
+ 
+ */
+RCT_REMAP_METHOD(asyncUpload, asyncUploadWithBucketName:(NSString *)bucketName objectKey:(NSString *)objectKey filepath:(NSString *)filepath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+    
+    [self beginUploadingWithFilepath:filepath resultBlock:^(NSData *data) {
+        
+        OSSPutObjectRequest *put = [OSSPutObjectRequest new];
+        
+        //required fields
+        put.bucketName = bucketName;
+        put.objectKey = objectKey;
+        put.uploadingData = data;
+        
+        //optional fields
+        put.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
+            NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+            
+            // Only send events if anyone is listening
+            if (_hasListeners) {
+                [self sendEventWithName:@"uploadProgress" body:@{@"bytesSent":[NSString stringWithFormat:@"%lld",bytesSent],
+                                                                 @"totalByteSent": [NSString stringWithFormat:@"%lld",totalByteSent],
+                                                                 @"totalBytesExpectedToSend": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+            }
+        };
+        
+        OSSTask *putTask = [_client putObject:put];
+        
+        [putTask continueWithBlock:^id(OSSTask *task) {
+            
+            if (!task.error) {
+                NSLog(@"upload object success!");
+                resolve(task.description);
+            } else {
+                NSLog(@"upload object failed, error: %@" , task.error);
+                reject(@"Error", @"Upload failed", task.error);
+            }
+            return nil;
+        }];
+        
+    }];
+}
+
+
+/**
+ Asynchronous downloading
+ 
+ */
+RCT_REMAP_METHOD(asyncDownload, asyncDownloadWithBucketName:(NSString *)bucketName objectKey:(NSString *)objectKey filepath:(NSString *)filepath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+    
+    OSSGetObjectRequest * get = [OSSGetObjectRequest new];
+    
+    //required fields
+    get.bucketName = bucketName;
+    get.objectKey = objectKey;
+    
+    //optional fields
+    get.downloadProgress = ^(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
         NSLog(@"%lld, %lld, %lld", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
-        [self sendEventWithName: @"downloadProgress" body:@{@"everySentSize":[NSString stringWithFormat:@"%lld",bytesWritten],
-                                                          @"currentSize": [NSString stringWithFormat:@"%lld",totalBytesWritten],
-                                                          @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToWrite]}];
+        // Only send events if anyone is listening
+        if (_hasListeners) {
+            [self sendEventWithName:@"downloadProgress" body:@{@"bytesWritten":[NSString stringWithFormat:@"%lld",bytesWritten],
+                                                               @"totalBytesWritten": [NSString stringWithFormat:@"%lld",totalBytesWritten],
+                                                               @"totalBytesExpectedToWrite": [NSString stringWithFormat:@"%lld",totalBytesExpectedToWrite]}];
+        }
     };
-    NSString *docDir = [self getDocumentDirectory];
-    NSLog(objectKey);
-    NSURL *url = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:objectKey]];
-    request.downloadToFileURL = url;
-    OSSTask *getTask = [client getObject:request];
+    
+    if (filepath) {
+        get.downloadToFileURL = [NSURL fileURLWithPath:[filepath stringByAppendingPathComponent:objectKey]];
+    } else {
+        NSString *docDir = [self getDocumentDirectory];
+        get.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:objectKey]];
+    }
+    
+    OSSTask * getTask = [_client getObject:get];
+    
     [getTask continueWithBlock:^id(OSSTask *task) {
+        
         if (!task.error) {
             NSLog(@"download object success!");
             OSSGetObjectResult *result = task.result;
             NSLog(@"download dota length: %lu", [result.downloadedData length]);
-            resolve(url.absoluteString);
+            resolve(get.downloadToFileURL);
         } else {
             NSLog(@"download object failed, error: %@" ,task.error);
-            reject(nil, @"download object failed", task.error);
+            reject(@"Error", @"Download failed", task.error);
         }
         return nil;
     }];
 }
-
-//异步上传
-RCT_REMAP_METHOD(uploadObjectAsync, bucketName:(NSString *)BucketName
-                  SourceFile:(NSString *)SourceFile
-                  OssFile:(NSString *)OssFile
-                  UpdateDate:(NSString *)UpdateDate
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    OSSPutObjectRequest * put = [OSSPutObjectRequest new];
-    
-    // required fields
-    put.bucketName = BucketName;
-    put.objectKey = OssFile;
-    //NSString * docDir = [self getDocumentDirectory];
-    //put.uploadingFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"file1m"]];
-    put.uploadingFileURL = [NSURL fileURLWithPath:SourceFile];
-    NSLog(@"uploadingFileURL: %@", put.uploadingFileURL);
-    // optional fields
-    put.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
-        NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
-        [self sendEventWithName: @"uploadProgress" body:@{@"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
-                                                          @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
-                                                          @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
-
-    };
-    //put.contentType = @"";
-    //put.contentMd5 = @"";
-    //put.contentEncoding = @"";
-    //put.contentDisposition = @"";
-     put.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys: UpdateDate, @"Date", nil];
-    
-    OSSTask * putTask = [client putObject:put];
-    
-    [putTask continueWithBlock:^id(OSSTask *task) {
-        NSLog(@"objectKey: %@", put.objectKey);
-        if (!task.error) {
-            NSLog(@"upload object success!");
-            resolve(@YES);
-        } else {
-            NSLog(@"upload object failed, error: %@" , task.error);
-            reject(@"-1", @"not respond this method", nil);
-        }
-        return nil;
-    }];
-}
-
-
-
 @end

@@ -3,122 +3,155 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00CAEE531DC05BFC003B3B1F /* RCTAliyunOSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAEE521DC05BFC003B3B1F /* RCTAliyunOSS.m */; };
-		371D4A561DDDC34B0063F802 /* AliyunOSSiOS in Frameworks */ = {isa = PBXBuildFile; fileRef = 371D4A451DDDC34B0063F802 /* AliyunOSSiOS */; };
+		345FE5761FEA1BE1005DED67 /* RCTAliyunOSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 345FE5751FEA1BE1005DED67 /* RCTAliyunOSS.m */; };
+		345FE5771FEA1BE1005DED67 /* RCTAliyunOSS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 345FE5741FEA1BE1005DED67 /* RCTAliyunOSS.h */; };
+		345FE57E1FEA1C64005DED67 /* AliyunOSSiOS in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE57D1FEA1C64005DED67 /* AliyunOSSiOS */; };
+		345FE59D1FEA1CCB005DED67 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */; };
+		345FE59F1FEA1CD3005DED67 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		00CAEE4C1DC05BFC003B3B1F /* Copy Files */ = {
+		345FE56F1FEA1BE1005DED67 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				345FE5771FEA1BE1005DED67 /* RCTAliyunOSS.h in CopyFiles */,
 			);
-			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00CAEE4E1DC05BFC003B3B1F /* libRCTAliyunOSS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTAliyunOSS.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		00CAEE511DC05BFC003B3B1F /* RCTAliyunOSS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAliyunOSS.h; sourceTree = "<group>"; };
-		00CAEE521DC05BFC003B3B1F /* RCTAliyunOSS.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAliyunOSS.m; sourceTree = "<group>"; };
-		371D4A451DDDC34B0063F802 /* AliyunOSSiOS */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = AliyunOSSiOS; path = AliyunOSSSDK/AliyunOSSiOS; sourceTree = "<group>"; };
-		371D4A461DDDC34B0063F802 /* OSSBolts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSBolts.h; path = AliyunOSSSDK/OSSBolts.h; sourceTree = "<group>"; };
-		371D4A471DDDC34B0063F802 /* OSSCancellationToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSCancellationToken.h; path = AliyunOSSSDK/OSSCancellationToken.h; sourceTree = "<group>"; };
-		371D4A481DDDC34B0063F802 /* OSSCancellationTokenRegistration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSCancellationTokenRegistration.h; path = AliyunOSSSDK/OSSCancellationTokenRegistration.h; sourceTree = "<group>"; };
-		371D4A491DDDC34B0063F802 /* OSSCancellationTokenSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSCancellationTokenSource.h; path = AliyunOSSSDK/OSSCancellationTokenSource.h; sourceTree = "<group>"; };
-		371D4A4A1DDDC34B0063F802 /* OSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSClient.h; path = AliyunOSSSDK/OSSClient.h; sourceTree = "<group>"; };
-		371D4A4B1DDDC34B0063F802 /* OSSCompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSCompat.h; path = AliyunOSSSDK/OSSCompat.h; sourceTree = "<group>"; };
-		371D4A4C1DDDC34B0063F802 /* OSSDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSDefine.h; path = AliyunOSSSDK/OSSDefine.h; sourceTree = "<group>"; };
-		371D4A4D1DDDC34B0063F802 /* OSSExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSExecutor.h; path = AliyunOSSSDK/OSSExecutor.h; sourceTree = "<group>"; };
-		371D4A4E1DDDC34B0063F802 /* OSSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSLog.h; path = AliyunOSSSDK/OSSLog.h; sourceTree = "<group>"; };
-		371D4A4F1DDDC34B0063F802 /* OSSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSModel.h; path = AliyunOSSSDK/OSSModel.h; sourceTree = "<group>"; };
-		371D4A501DDDC34B0063F802 /* OSSNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSNetworking.h; path = AliyunOSSSDK/OSSNetworking.h; sourceTree = "<group>"; };
-		371D4A511DDDC34B0063F802 /* OSSService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSService.h; path = AliyunOSSSDK/OSSService.h; sourceTree = "<group>"; };
-		371D4A521DDDC34B0063F802 /* OSSTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSTask.h; path = AliyunOSSSDK/OSSTask.h; sourceTree = "<group>"; };
-		371D4A531DDDC34B0063F802 /* OSSTaskCompletionSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSTaskCompletionSource.h; path = AliyunOSSSDK/OSSTaskCompletionSource.h; sourceTree = "<group>"; };
-		371D4A541DDDC34B0063F802 /* OSSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSUtil.h; path = AliyunOSSSDK/OSSUtil.h; sourceTree = "<group>"; };
-		371D4A551DDDC34B0063F802 /* OSSXMLDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSSXMLDictionary.h; path = AliyunOSSSDK/OSSXMLDictionary.h; sourceTree = "<group>"; };
+		345FE5711FEA1BE1005DED67 /* libRCTAliyunOSS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTAliyunOSS.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		345FE5741FEA1BE1005DED67 /* RCTAliyunOSS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAliyunOSS.h; sourceTree = "<group>"; };
+		345FE5751FEA1BE1005DED67 /* RCTAliyunOSS.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAliyunOSS.m; sourceTree = "<group>"; };
+		345FE57D1FEA1C64005DED67 /* AliyunOSSiOS */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = AliyunOSSiOS; sourceTree = "<group>"; };
+		345FE57F1FEA1C79005DED67 /* OSSCancellationToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCancellationToken.h; sourceTree = "<group>"; };
+		345FE5801FEA1C79005DED67 /* OSSIPv6PrefixResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSIPv6PrefixResolver.h; sourceTree = "<group>"; };
+		345FE5811FEA1C79005DED67 /* OSSHttpdns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSHttpdns.h; sourceTree = "<group>"; };
+		345FE5821FEA1C79005DED67 /* OSSNSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSNSLogger.h; sourceTree = "<group>"; };
+		345FE5831FEA1C79005DED67 /* OSSService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSService.h; sourceTree = "<group>"; };
+		345FE5841FEA1C79005DED67 /* NSMutableData+OSS_CRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableData+OSS_CRC.h"; sourceTree = "<group>"; };
+		345FE5851FEA1C79005DED67 /* OSSCancellationTokenRegistration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCancellationTokenRegistration.h; sourceTree = "<group>"; };
+		345FE5861FEA1C79005DED67 /* OSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSClient.h; sourceTree = "<group>"; };
+		345FE5871FEA1C79005DED67 /* OSSExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSExecutor.h; sourceTree = "<group>"; };
+		345FE5881FEA1C79005DED67 /* OSSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSUtil.h; sourceTree = "<group>"; };
+		345FE5891FEA1C79005DED67 /* OSSDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSDefine.h; sourceTree = "<group>"; };
+		345FE58A1FEA1C79005DED67 /* OSSTaskCompletionSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSTaskCompletionSource.h; sourceTree = "<group>"; };
+		345FE58B1FEA1C7A005DED67 /* OSSIPv6Adapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSIPv6Adapter.h; sourceTree = "<group>"; };
+		345FE58C1FEA1C7A005DED67 /* OSSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSModel.h; sourceTree = "<group>"; };
+		345FE58D1FEA1C7A005DED67 /* OSSFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSFileLogger.h; sourceTree = "<group>"; };
+		345FE58E1FEA1C7A005DED67 /* OSSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSReachability.h; sourceTree = "<group>"; };
+		345FE58F1FEA1C7A005DED67 /* OSSCompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCompat.h; sourceTree = "<group>"; };
+		345FE5901FEA1C7A005DED67 /* OSSXMLDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSXMLDictionary.h; sourceTree = "<group>"; };
+		345FE5911FEA1C7A005DED67 /* OSSBolts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSBolts.h; sourceTree = "<group>"; };
+		345FE5921FEA1C7A005DED67 /* OSSCancellationTokenSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCancellationTokenSource.h; sourceTree = "<group>"; };
+		345FE5931FEA1C7A005DED67 /* OSSTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSTask.h; sourceTree = "<group>"; };
+		345FE5941FEA1C7A005DED67 /* OSSNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSNetworking.h; sourceTree = "<group>"; };
+		345FE5951FEA1C7B005DED67 /* AliyunOSSiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AliyunOSSiOS.h; sourceTree = "<group>"; };
+		345FE5961FEA1C7B005DED67 /* OSSDDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSDDLog.h; sourceTree = "<group>"; };
+		345FE5971FEA1C7B005DED67 /* OSSLogMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSLogMacros.h; sourceTree = "<group>"; };
+		345FE5981FEA1C7B005DED67 /* OSSCocoaLumberjack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCocoaLumberjack.h; sourceTree = "<group>"; };
+		345FE5991FEA1C7B005DED67 /* OSSReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSReachabilityManager.h; sourceTree = "<group>"; };
+		345FE59A1FEA1C7B005DED67 /* OSSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSLog.h; sourceTree = "<group>"; };
+		345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00CAEE4B1DC05BFC003B3B1F /* Frameworks */ = {
+		345FE56E1FEA1BE1005DED67 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				371D4A561DDDC34B0063F802 /* AliyunOSSiOS in Frameworks */,
+				345FE59F1FEA1CD3005DED67 /* CoreTelephony.framework in Frameworks */,
+				345FE59D1FEA1CCB005DED67 /* SystemConfiguration.framework in Frameworks */,
+				345FE57E1FEA1C64005DED67 /* AliyunOSSiOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00CAEE451DC05BFC003B3B1F = {
+		345FE5681FEA1BE1005DED67 = {
 			isa = PBXGroup;
 			children = (
-				371D4A3D1DDDC1E50063F802 /* AliyunOSSSDK */,
-				00CAEE501DC05BFC003B3B1F /* RCTAliyunOSS */,
-				00CAEE4F1DC05BFC003B3B1F /* Products */,
+				345FE5731FEA1BE1005DED67 /* RCTAliyunOSS */,
+				345FE5721FEA1BE1005DED67 /* Products */,
+				345FE59B1FEA1CCA005DED67 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		00CAEE4F1DC05BFC003B3B1F /* Products */ = {
+		345FE5721FEA1BE1005DED67 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00CAEE4E1DC05BFC003B3B1F /* libRCTAliyunOSS.a */,
+				345FE5711FEA1BE1005DED67 /* libRCTAliyunOSS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00CAEE501DC05BFC003B3B1F /* RCTAliyunOSS */ = {
+		345FE5731FEA1BE1005DED67 /* RCTAliyunOSS */ = {
 			isa = PBXGroup;
 			children = (
-				00CAEE511DC05BFC003B3B1F /* RCTAliyunOSS.h */,
-				00CAEE521DC05BFC003B3B1F /* RCTAliyunOSS.m */,
+				345FE57D1FEA1C64005DED67 /* AliyunOSSiOS */,
+				345FE5951FEA1C7B005DED67 /* AliyunOSSiOS.h */,
+				345FE5841FEA1C79005DED67 /* NSMutableData+OSS_CRC.h */,
+				345FE5911FEA1C7A005DED67 /* OSSBolts.h */,
+				345FE57F1FEA1C79005DED67 /* OSSCancellationToken.h */,
+				345FE5851FEA1C79005DED67 /* OSSCancellationTokenRegistration.h */,
+				345FE5921FEA1C7A005DED67 /* OSSCancellationTokenSource.h */,
+				345FE5861FEA1C79005DED67 /* OSSClient.h */,
+				345FE5981FEA1C7B005DED67 /* OSSCocoaLumberjack.h */,
+				345FE58F1FEA1C7A005DED67 /* OSSCompat.h */,
+				345FE5961FEA1C7B005DED67 /* OSSDDLog.h */,
+				345FE5891FEA1C79005DED67 /* OSSDefine.h */,
+				345FE5871FEA1C79005DED67 /* OSSExecutor.h */,
+				345FE58D1FEA1C7A005DED67 /* OSSFileLogger.h */,
+				345FE5811FEA1C79005DED67 /* OSSHttpdns.h */,
+				345FE58B1FEA1C7A005DED67 /* OSSIPv6Adapter.h */,
+				345FE5801FEA1C79005DED67 /* OSSIPv6PrefixResolver.h */,
+				345FE59A1FEA1C7B005DED67 /* OSSLog.h */,
+				345FE5971FEA1C7B005DED67 /* OSSLogMacros.h */,
+				345FE58C1FEA1C7A005DED67 /* OSSModel.h */,
+				345FE5941FEA1C7A005DED67 /* OSSNetworking.h */,
+				345FE5821FEA1C79005DED67 /* OSSNSLogger.h */,
+				345FE58E1FEA1C7A005DED67 /* OSSReachability.h */,
+				345FE5991FEA1C7B005DED67 /* OSSReachabilityManager.h */,
+				345FE5831FEA1C79005DED67 /* OSSService.h */,
+				345FE5931FEA1C7A005DED67 /* OSSTask.h */,
+				345FE58A1FEA1C79005DED67 /* OSSTaskCompletionSource.h */,
+				345FE5881FEA1C79005DED67 /* OSSUtil.h */,
+				345FE5901FEA1C7A005DED67 /* OSSXMLDictionary.h */,
+				345FE5741FEA1BE1005DED67 /* RCTAliyunOSS.h */,
+				345FE5751FEA1BE1005DED67 /* RCTAliyunOSS.m */,
 			);
 			path = RCTAliyunOSS;
 			sourceTree = "<group>";
 		};
-		371D4A3D1DDDC1E50063F802 /* AliyunOSSSDK */ = {
+		345FE59B1FEA1CCA005DED67 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				371D4A451DDDC34B0063F802 /* AliyunOSSiOS */,
-				371D4A461DDDC34B0063F802 /* OSSBolts.h */,
-				371D4A471DDDC34B0063F802 /* OSSCancellationToken.h */,
-				371D4A481DDDC34B0063F802 /* OSSCancellationTokenRegistration.h */,
-				371D4A491DDDC34B0063F802 /* OSSCancellationTokenSource.h */,
-				371D4A4A1DDDC34B0063F802 /* OSSClient.h */,
-				371D4A4B1DDDC34B0063F802 /* OSSCompat.h */,
-				371D4A4C1DDDC34B0063F802 /* OSSDefine.h */,
-				371D4A4D1DDDC34B0063F802 /* OSSExecutor.h */,
-				371D4A4E1DDDC34B0063F802 /* OSSLog.h */,
-				371D4A4F1DDDC34B0063F802 /* OSSModel.h */,
-				371D4A501DDDC34B0063F802 /* OSSNetworking.h */,
-				371D4A511DDDC34B0063F802 /* OSSService.h */,
-				371D4A521DDDC34B0063F802 /* OSSTask.h */,
-				371D4A531DDDC34B0063F802 /* OSSTaskCompletionSource.h */,
-				371D4A541DDDC34B0063F802 /* OSSUtil.h */,
-				371D4A551DDDC34B0063F802 /* OSSXMLDictionary.h */,
+				345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */,
+				345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */,
 			);
-			name = AliyunOSSSDK;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00CAEE4D1DC05BFC003B3B1F /* RCTAliyunOSS */ = {
+		345FE5701FEA1BE1005DED67 /* RCTAliyunOSS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00CAEE571DC05BFC003B3B1F /* Build configuration list for PBXNativeTarget "RCTAliyunOSS" */;
+			buildConfigurationList = 345FE57A1FEA1BE1005DED67 /* Build configuration list for PBXNativeTarget "RCTAliyunOSS" */;
 			buildPhases = (
-				00CAEE4A1DC05BFC003B3B1F /* Sources */,
-				00CAEE4B1DC05BFC003B3B1F /* Frameworks */,
-				00CAEE4C1DC05BFC003B3B1F /* Copy Files */,
+				345FE56D1FEA1BE1005DED67 /* Sources */,
+				345FE56E1FEA1BE1005DED67 /* Frameworks */,
+				345FE56F1FEA1BE1005DED67 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -126,63 +159,66 @@
 			);
 			name = RCTAliyunOSS;
 			productName = RCTAliyunOSS;
-			productReference = 00CAEE4E1DC05BFC003B3B1F /* libRCTAliyunOSS.a */;
+			productReference = 345FE5711FEA1BE1005DED67 /* libRCTAliyunOSS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		00CAEE461DC05BFC003B3B1F /* Project object */ = {
+		345FE5691FEA1BE1005DED67 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = lesonli;
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "张旭";
 				TargetAttributes = {
-					00CAEE4D1DC05BFC003B3B1F = {
-						CreatedOnToolsVersion = 8.0;
+					345FE5701FEA1BE1005DED67 = {
+						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 00CAEE491DC05BFC003B3B1F /* Build configuration list for PBXProject "RCTAliyunOSS" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			buildConfigurationList = 345FE56C1FEA1BE1005DED67 /* Build configuration list for PBXProject "RCTAliyunOSS" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 00CAEE451DC05BFC003B3B1F;
-			productRefGroup = 00CAEE4F1DC05BFC003B3B1F /* Products */;
+			mainGroup = 345FE5681FEA1BE1005DED67;
+			productRefGroup = 345FE5721FEA1BE1005DED67 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00CAEE4D1DC05BFC003B3B1F /* RCTAliyunOSS */,
+				345FE5701FEA1BE1005DED67 /* RCTAliyunOSS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00CAEE4A1DC05BFC003B3B1F /* Sources */ = {
+		345FE56D1FEA1BE1005DED67 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00CAEE531DC05BFC003B3B1F /* RCTAliyunOSS.m in Sources */,
+				345FE5761FEA1BE1005DED67 /* RCTAliyunOSS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		00CAEE551DC05BFC003B3B1F /* Debug */ = {
+		345FE5781FEA1BE1005DED67 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -190,17 +226,21 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -214,23 +254,26 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
-		00CAEE561DC05BFC003B3B1F /* Release */ = {
+		345FE5791FEA1BE1005DED67 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -238,17 +281,21 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -256,65 +303,67 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		00CAEE581DC05BFC003B3B1F /* Debug */ = {
+		345FE57B1FEA1BE1005DED67 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
+				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/AliyunOSSSDK",
+					"$(PROJECT_DIR)/RCTAliyunOSS",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		00CAEE591DC05BFC003B3B1F /* Release */ = {
+		345FE57C1FEA1BE1005DED67 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
+				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
 				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/AliyunOSSSDK",
 					"$(inherited)",
+					"$(PROJECT_DIR)/RCTAliyunOSS",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00CAEE491DC05BFC003B3B1F /* Build configuration list for PBXProject "RCTAliyunOSS" */ = {
+		345FE56C1FEA1BE1005DED67 /* Build configuration list for PBXProject "RCTAliyunOSS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				00CAEE551DC05BFC003B3B1F /* Debug */,
-				00CAEE561DC05BFC003B3B1F /* Release */,
+				345FE5781FEA1BE1005DED67 /* Debug */,
+				345FE5791FEA1BE1005DED67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00CAEE571DC05BFC003B3B1F /* Build configuration list for PBXNativeTarget "RCTAliyunOSS" */ = {
+		345FE57A1FEA1BE1005DED67 /* Build configuration list for PBXNativeTarget "RCTAliyunOSS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				00CAEE581DC05BFC003B3B1F /* Debug */,
-				00CAEE591DC05BFC003B3B1F /* Release */,
+				345FE57B1FEA1BE1005DED67 /* Debug */,
+				345FE57C1FEA1BE1005DED67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 00CAEE461DC05BFC003B3B1F /* Project object */;
+	rootObject = 345FE5691FEA1BE1005DED67 /* Project object */;
 }
