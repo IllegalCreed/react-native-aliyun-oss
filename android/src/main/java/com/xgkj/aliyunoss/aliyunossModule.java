@@ -1,5 +1,6 @@
 package com.xgkj.aliyunoss;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSCustomSignerCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.common.utils.IOUtils;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
@@ -83,26 +85,7 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void initWithPlainTextAccessKey(String accessKeyId, String accessKeySecret, String endPoint, ReadableMap configuration) {
-        OSSCredentialProvider credentialProvider = new OSSFederationCredentialProvider() {
-            @Override
-            public OSSFederationToken getFederationToken() {
-                try {
-                    URL stsUrl = new URL("http://localhost:8080/distribute-token.json");
-                    HttpURLConnection conn = (HttpURLConnection) stsUrl.openConnection();
-                    InputStream input = conn.getInputStream();
-                    String jsonText = IOUtils.readStreamAsString(input, OSSConstants.DEFAULT_CHARSET_NAME);
-                    JSONObject jsonObjs = new JSONObject(jsonText);
-                    String ak = jsonObjs.getString("accessKeyId");
-                    String sk = jsonObjs.getString("accessKeySecret");
-                    String token = jsonObjs.getString("securityToken");
-                    String expiration = jsonObjs.getString("expiration");
-                    return new OSSFederationToken(ak, sk, token, expiration);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
+        OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(accessKeyId, accessKeySecret);
 
         ClientConfiguration conf = new ClientConfiguration();
         conf.setConnectionTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
@@ -137,6 +120,7 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
         // 构造上传请求
         if (sourceFile != null) {
             sourceFile = sourceFile.replace("file://", "");
+            sourceFile = PathUtil.getPath(getReactApplicationContext(), Uri.parse(sourceFile));
         }
         PutObjectRequest put = new PutObjectRequest(bucketName, ossFile, sourceFile);
         ObjectMetadata metadata = new ObjectMetadata();
