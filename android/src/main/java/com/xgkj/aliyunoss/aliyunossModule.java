@@ -11,14 +11,10 @@ import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
-import com.alibaba.sdk.android.oss.common.OSSConstants;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSCustomSignerCredentialProvider;
-import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
-import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken;
 import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
-import com.alibaba.sdk.android.oss.common.utils.IOUtils;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.GetObjectRequest;
 import com.alibaba.sdk.android.oss.model.GetObjectResult;
@@ -34,15 +30,11 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class aliyunossModule extends ReactContextBaseJavaModule {
 
@@ -60,6 +52,15 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
         return "AliyunOSS";
     }
 
+    private ClientConfiguration initConfig(ReadableMap configuration) {
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
+        conf.setSocketTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
+        conf.setMaxConcurrentRequest(configuration.getInt("maxRetryCount"));
+        conf.setMaxErrorRetry(configuration.getInt("maxRetryCount"));
+        return conf;
+    }
+
 
     @ReactMethod
     public void initWithSigner(final String signature, final String accessKey, String endPoint, ReadableMap configuration) {
@@ -71,13 +72,9 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
             }
         };
 
-        ClientConfiguration conf = new ClientConfiguration();
-        conf.setConnectionTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setSocketTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setMaxConcurrentRequest(configuration.getInt("maxRetryCount"));
-        conf.setMaxErrorRetry(configuration.getInt("maxRetryCount"));
+        ClientConfiguration conf = this.initConfig(configuration);
 
-        oss = new OSSClient(getReactApplicationContext().getApplicationContext(), endPoint, credentialProvider, conf);
+        oss = new OSSClient(reactContext.getApplicationContext(), endPoint, credentialProvider, conf);
 
         Log.d("AliyunOSS", "OSS initWithSigner ok!");
     }
@@ -87,13 +84,9 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
     public void initWithPlainTextAccessKey(String accessKeyId, String accessKeySecret, String endPoint, ReadableMap configuration) {
         OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(accessKeyId, accessKeySecret);
 
-        ClientConfiguration conf = new ClientConfiguration();
-        conf.setConnectionTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setSocketTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setMaxConcurrentRequest(configuration.getInt("maxRetryCount"));
-        conf.setMaxErrorRetry(configuration.getInt("maxRetryCount"));
+        ClientConfiguration conf = this.initConfig(configuration);
 
-        oss = new OSSClient(getReactApplicationContext().getApplicationContext(), endPoint, credentialProvider, conf);
+        oss = new OSSClient(reactContext.getApplicationContext(), endPoint, credentialProvider, conf);
 
         Log.d("AliyunOSS", "OSS initWithKey ok!");
     }
@@ -103,13 +96,9 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
     public void initWithSecurityToken(String securityToken, String accessKeyId, String accessKeySecret, String endPoint, ReadableMap configuration) {
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(accessKeyId, accessKeySecret, securityToken);
 
-        ClientConfiguration conf = new ClientConfiguration();
-        conf.setConnectionTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setSocketTimeout(configuration.getInt("timeoutIntervalForRequest") * 1000);
-        conf.setMaxConcurrentRequest(configuration.getInt("maxRetryCount"));
-        conf.setMaxErrorRetry(configuration.getInt("maxRetryCount"));
+        ClientConfiguration conf = this.initConfig(configuration);
 
-        oss = new OSSClient(getReactApplicationContext().getApplicationContext(), endPoint, credentialProvider, conf);
+        oss = new OSSClient(reactContext.getApplicationContext(), endPoint, credentialProvider, conf);
 
         Log.d("AliyunOSS", "OSS initWithKey ok!");
     }
@@ -120,7 +109,9 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
         // 构造上传请求
         if (sourceFile != null) {
             sourceFile = sourceFile.replace("file://", "");
-            sourceFile = PathUtil.getPath(getReactApplicationContext(), Uri.parse(sourceFile));
+            if (sourceFile.startsWith("content://")) {
+                sourceFile = PathUtil.getPath(getReactApplicationContext(), Uri.parse(sourceFile));
+            }
         }
         PutObjectRequest put = new PutObjectRequest(bucketName, ossFile, sourceFile);
         ObjectMetadata metadata = new ObjectMetadata();
