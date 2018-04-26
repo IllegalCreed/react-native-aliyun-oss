@@ -8,10 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		345FE5761FEA1BE1005DED67 /* RCTAliyunOSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 345FE5751FEA1BE1005DED67 /* RCTAliyunOSS.m */; };
-		345FE5771FEA1BE1005DED67 /* RCTAliyunOSS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 345FE5741FEA1BE1005DED67 /* RCTAliyunOSS.h */; };
 		345FE57E1FEA1C64005DED67 /* AliyunOSSiOS in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE57D1FEA1C64005DED67 /* AliyunOSSiOS */; };
-		345FE59D1FEA1CCB005DED67 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */; };
-		345FE59F1FEA1CD3005DED67 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -21,7 +18,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				345FE5771FEA1BE1005DED67 /* RCTAliyunOSS.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,8 +56,6 @@
 		345FE5981FEA1C7B005DED67 /* OSSCocoaLumberjack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCocoaLumberjack.h; sourceTree = "<group>"; };
 		345FE5991FEA1C7B005DED67 /* OSSReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSReachabilityManager.h; sourceTree = "<group>"; };
 		345FE59A1FEA1C7B005DED67 /* OSSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSLog.h; sourceTree = "<group>"; };
-		345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +63,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				345FE59F1FEA1CD3005DED67 /* CoreTelephony.framework in Frameworks */,
-				345FE59D1FEA1CCB005DED67 /* SystemConfiguration.framework in Frameworks */,
 				345FE57E1FEA1C64005DED67 /* AliyunOSSiOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,8 +128,6 @@
 		345FE59B1FEA1CCA005DED67 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				345FE59E1FEA1CD3005DED67 /* CoreTelephony.framework */,
-				345FE59C1FEA1CCB005DED67 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -315,6 +305,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/RCTAliyunOSS",
@@ -322,7 +313,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -331,6 +322,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/RCTAliyunOSS",
@@ -338,7 +330,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
